@@ -55,7 +55,18 @@ namespace bamboosmp {
     // ------------ cuda utility methods -----------------------------
     template<typename F, typename... Arg>
     void ExecuteNTasklet(size_t n, F f, Arg... arg) {
-      LaunchKernelForEach(this->cuda_stream_, n, f, arg...);
+      // LaunchKernelForEach(this->cuda_stream_, n, f, arg...);
+
+      int grid_size, block_size;
+      block_size = 256;
+      grid_size = (n + block_size - 1) / block_size;
+
+      KernelWrapperForEach<<<grid_size, block_size, 0, cuda_stream_.cuda_stream()>>>(
+        n, f, std::forward<Arg>(arg)...);
+
+      cuda_stream_.Sync();
+
+      CUDA_CHECK_KERNEL(f);
     }
   };
 } // namespace bamboosmp
