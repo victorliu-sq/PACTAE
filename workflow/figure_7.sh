@@ -12,13 +12,13 @@ mkdir -p tmp/logs tmp/metrics data/figures
 
 # =================================== Figrue 7 Bottom ======================================================
 echo "[F7] Running bottom benchmark…"
- Try with explicit CLI first; if your binary doesn't take args, run without
-if ! ./cmake-build-release/benchmark/figure_7_bottom --size "$SIZE" --group "$GROUP"; then
+# Try with explicit CLI first; if your binary doesn't take args, run without
+if ! ./cmake-build-release/benchmark/figure_8_bottom --size "$SIZE" --group "$GROUP"; then
   ./cmake-build-release/benchmark/figure_7_bottom
 fi
 
 echo "[F7] Parsing bottom timing…"
- Prefer explicit outputs; if your parser doesn’t support flags, fall back
+# Prefer explicit outputs; if your parser doesn’t support flags, fall back
 if ! python3 scripts/f7_parse_bottom_times.py --size "$SIZE" --group "$GROUP" --out tmp/metrics/timing_data.json; then
   python3 scripts/f7_parse_bottom_times.py
 fi
