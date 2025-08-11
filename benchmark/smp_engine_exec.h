@@ -1,6 +1,6 @@
 #ifndef SMP_ENGINE_RUNNER_H
 #define SMP_ENGINE_RUNNER_H
-#include "../test/smp_engine_test_utils.h"
+#include "smp/smp.h"
 #include "utils/generate_workloads_flat.h"
 
 template<typename SmpEngine>

@@ -1,8 +1,7 @@
 #ifndef SMP_INIT_ENGINE_EXEC_H
 #define SMP_INIT_ENGINE_EXEC_H
 
-#include "../test/smp_engine_test_utils.h"
-#include "utils/generate_worklods.h"
+#include "utils/generate_workloads_flat.h"
 #include "smp/smp_init.h"
 
 template<typename SmpInitEngine>

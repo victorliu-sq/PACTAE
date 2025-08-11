@@ -1,8 +1,8 @@
 #include "smp_engine_exec.h"
+#include "smp/smp_engine_gs_1.h"
 #include "smp/smp_engine_gs_2.h"
 #include "smp/smp_engine_mw_1.h"
 #include "smp/smp_engine_mw_2.h"
-#include "smp/smp_engine_mw_3_f8_top.h"
 #include "smp/smp_engine_mw_3_t1.h"
 
 int main() {
