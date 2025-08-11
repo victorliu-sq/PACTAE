@@ -49,6 +49,14 @@ else ()
     include_directories(SYSTEM ${GLOG_INCLUDE_DIRS})
 endif ()
 
+# NEW: find gflags from the same prefix (.ae/deps)
+find_package(gflags CONFIG REQUIRED)
+
+# (optional but helps at runtime w/o LD_LIBRARY_PATH)
+set(CMAKE_BUILD_RPATH  "${_AE_DEPS}/lib64")
+set(CMAKE_INSTALL_RPATH "${_AE_DEPS}/lib64")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 # Add this line right before the add_subdirectory commands:
 add_compile_definitions(GLOG_USE_GLOG_EXPORT)
 
