@@ -1,6 +1,8 @@
 # BambooSMP
 
-BambooSMP is a high-performance parallel processing framework designed to efficiently solve the Stable Marriage Problem (SMP). Named after the resilient and fast-growing bamboo plant, BambooSMP aims to deliver robust performance across various challenging scenarios.
+BambooSMP is a high-performance parallel processing framework designed to efficiently solve the Stable Marriage
+Problem (SMP). Named after the resilient and fast-growing bamboo plant, BambooSMP aims to deliver robust performance
+across various challenging scenarios.
 
 ## Installation Guide
 
@@ -12,15 +14,17 @@ BambooSMP is a high-performance parallel processing framework designed to effici
 
 Please ensure your system meets the following minimum software versions (greater than or equal to these values):
 
-    CUDA: 12.6.2
-    GCC: 13.2.0
-    CMake: 3.25.2
+    bash
+    wget or curl
+    perf 
+    ncu 
+    CUDA: 12.6
+    GCC: 11.4.0
+    CMake: 3.22.1
     Python: 3.10
-    perf (Linux performance analysis tool)
-    ncu (NVIDIA Nsight Compute CLI)
-    wget or curl (required for downloading data)
 
-Note: perf and ncu must be installed and accessible in your system's PATH. If they are missing, consult your system administrator or package manager.
+Note: perf and ncu must be installed and accessible in your system's PATH. If they are missing, consult your system
+administrator or package manager.
 
 ---
 
@@ -30,4 +34,6 @@ To run BambooSMP, simply execute the following from the project root directory:
 
     ./runme.sh
 
-The script will automatically handle dependencies downloads (requires wget or curl), installation, compilation, and execution of workloads. The resulting `figure3`, `figure5`, `table1`, `figure7`, `figure8`, and `figure9` will be stored in the `data/figures` directory.
+The script will automatically handle dependencies downloads (requires wget or curl), installation, compilation, and
+execution of workloads. The resulting `figure3`, `figure5`, `table1`, `figure7`, `figure8`, and `figure9` will be stored
+in the `data/figures` directory.
