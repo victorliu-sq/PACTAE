@@ -13,7 +13,7 @@ mkdir -p tmp/logs tmp/metrics data/figures
 # =================================== Figrue 7 Bottom ======================================================
 echo "[F7] Running bottom benchmark…"
 # Try with explicit CLI first; if your binary doesn't take args, run without
-if ! ./cmake-build-release/benchmark/figure_8_bottom --size "$SIZE" --group "$GROUP"; then
+if ! ./cmake-build-release/benchmark/figure_7_bottom --size "$SIZE" --group "$GROUP"; then
   ./cmake-build-release/benchmark/figure_7_bottom
 fi
 
