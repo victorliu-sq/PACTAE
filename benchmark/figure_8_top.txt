@@ -1,0 +1,79 @@
+#include "smp_engine_exec.h"
+#include "smp_init_engine_exec.h"
+#include "smp/smp_engine_la_2_f8_top.h"
+#include "smp/smp_engine_la_3.h"
+#include <smp/smp_engine_mw_3_f8_top.h>
+#include "smp/smp_engine_mw_4.h"
+
+int main() {
+  INIT_GLOG_STR("figure_8_top");
+
+  // ========================================================================================
+  // Congested Case
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 5000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 5000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 5000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 5000);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 10000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 10000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 10000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 10000);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 15000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 15000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 15000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 15000);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 20000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 20000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 20000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 20000);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 25000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 25000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 25000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 25000);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(CONGESTED, 30000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(CONGESTED, 30000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(CONGESTED, 30000);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(CONGESTED, 30000);
+
+  // ========================================================================================
+  // Random Case
+  // const size_t random_workload_size = 30000;
+  const size_t random_workload_size = 10000;
+
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(RANDOM, random_workload_size, 5);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 5);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(RANDOM, random_workload_size, 5);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 5);
+  //
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw3>(RANDOM, random_workload_size, 10);
+  // SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 10);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa2>(RANDOM, random_workload_size, 10);
+  // SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 10);
+  //
+  SmpEngineExecutor<bamboosmp::SmpEngineMw3F8Top>(RANDOM, random_workload_size, 20);
+  SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 20);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa2F8Top>(RANDOM, random_workload_size, 20);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 20);
+
+  SmpEngineExecutor<bamboosmp::SmpEngineMw3F8Top>(RANDOM, random_workload_size, 30);
+  SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 30);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa2F8Top>(RANDOM, random_workload_size, 30);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 30);
+
+  SmpEngineExecutor<bamboosmp::SmpEngineMw3F8Top>(RANDOM, random_workload_size, 40);
+  SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 40);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa2F8Top>(RANDOM, random_workload_size, 40);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 40);
+
+  SmpEngineExecutor<bamboosmp::SmpEngineMw3F8Top>(RANDOM, random_workload_size, 50);
+  SmpEngineExecutor<bamboosmp::SmpEngineMw4>(RANDOM, random_workload_size, 50);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa2F8Top>(RANDOM, random_workload_size, 50);
+  SmpEngineExecutor<bamboosmp::SmpEngineLa3>(RANDOM, random_workload_size, 50);
+
+  SHUTDOWN_GLOG();
+}

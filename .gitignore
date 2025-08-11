@@ -1,0 +1,10 @@
+build/
+cmake-build-debug/
+cmake-build-release/
+tmp/
+.idea/
+third_party/
+data/
+/data/workloads/
+.ae/
+/.venv/

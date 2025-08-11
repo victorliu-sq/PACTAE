@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: [-I/users/PAS0350/a1292072076/BambooSMP/include, -I/users/PAS0350/a1292072076/BambooSMP/dep/googletest/googletest/include, "--cuda-gpu-arch=sm_80"]
+  # Add: [-I/home/liu.11080/SPII/include, -I/home/liu.11080/SPII/dep/googletest/googletest/include, "--cuda-gpu-arch=sm_80"]
+  Remove:
+    - -forward-unknown-to-host-compiler
+    - --generate-code*
+    - -fcuda-allow-variadic-functions
+    - -fno-lifetime-dse
+    - '-Xcompiler=-fPIC'
+    - '--options-file'

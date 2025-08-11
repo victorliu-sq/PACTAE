@@ -1,0 +1,130 @@
+#include <benchmark/benchmark.h>
+#include "smp/smp_engine_multigpu.h"
+#include "utils/generate_worklods.h"
+#include "utils/utils.h"
+#include "utils/timer.h"
+
+// Helper to cache and reuse workloads by type and size
+static std::shared_ptr<bamboosmp::SmpObj> GetOrCreateCachedSmp(
+  WorkloadType type, int smp_size, int group_size = 100) {
+  static std::map<std::tuple<WorkloadType, int, int>, std::shared_ptr<bamboosmp::SmpObj> > cached_smps;
+
+  auto key = std::make_tuple(type, smp_size, group_size);
+  auto it = cached_smps.find(key);
+
+  if (it != cached_smps.end()) {
+    return it->second;
+  }
+
+  PreferenceLists pl_m, pl_w;
+  LOG(INFO) << "Generating workload type=" << type << ", size=" << smp_size
+      << ", group_size=" << group_size;
+
+  GenerateWorkload(type, smp_size, pl_m, pl_w, group_size);
+  auto smp = bamboosmp::SmpObj::CreateFromPrefLists(pl_m, pl_w, smp_size);
+
+  cached_smps[key] = std::move(smp);
+  return cached_smps[key];
+}
+
+// ===========================================================================================
+// Benchmark function for Congested workloads
+static void BM_SmpEngineMultiGpu_Congested_Scaling(benchmark::State &state) {
+  INIT_GLOG_STR("BM_SmpEngineMultiGpu_Congested_Scaling");
+
+  constexpr int num_gpus = 4;
+  int smp_size = state.range(0);
+
+  std::cout << "Running CONGESTED benchmark, GPUs=" << num_gpus
+      << ", size=" << smp_size << std::endl;
+
+  auto smp = GetOrCreateCachedSmp(CONGESTED, smp_size);
+
+  for (auto _: state) {
+    bamboosmp::SmpEngineMultiGpu engine(*smp, smp_size, num_gpus);
+    engine.FindStableMatching();
+  }
+
+  WriteTimingsToFile("data/benchmark/congested_scaling_timing_results.txt",
+                     "CONGESTED", num_gpus, smp_size);
+
+  SHUTDOWN_GLOG();
+}
+
+// BENCHMARK(BM_SmpEngineMultiGpu_Congested_Scaling)
+// ->Arg(50000)
+// ->Arg(60000)
+// ->Arg(70000)
+// ->Arg(80000)
+// ->Arg(90000)
+// ->Arg(100000)
+// ->Iterations(1);
+
+// ===========================================================================================
+// Benchmark function for Random workloads
+static void BM_SmpEngineMultiGpu_Random_Scaling(benchmark::State &state) {
+  INIT_GLOG_STR("BM_SmpEngineMultiGpu_Random_Scaling");
+
+  constexpr int num_gpus = 4;
+  constexpr int group_size = 100;
+  int smp_size = state.range(0);
+
+  std::cout << "Running RANDOM benchmark, GPUs=" << num_gpus
+      << ", size=" << smp_size << ", group size=" << group_size << std::endl;
+
+  auto smp = GetOrCreateCachedSmp(RANDOM, smp_size, group_size);
+
+  for (auto _: state) {
+    bamboosmp::SmpEngineMultiGpu engine(*smp, smp_size, num_gpus);
+    engine.FindStableMatching();
+  }
+
+  WriteTimingsToFile("data/benchmark/random_scaling_timing_results.txt",
+                     "RANDOM", num_gpus, smp_size, group_size);
+
+  SHUTDOWN_GLOG();
+}
+
+// BENCHMARK(BM_SmpEngineMultiGpu_Random_Scaling)
+//     ->Arg(50000)
+//     ->Arg(60000)
+//     ->Arg(70000)
+//     ->Arg(80000)
+//     ->Arg(90000)
+//     ->Iterations(1);
+
+
+// ===========================================================================================
+// Benchmark function for Solo workloads
+static void BM_SmpEngineMultiGpu_Solo_Scaling(benchmark::State &state) {
+  INIT_GLOG_STR("BM_SmpEngineMultiGpu_Solo_Scaling");
+
+  constexpr int num_gpus = 4;
+  int smp_size = state.range(0);
+
+  std::cout << "Running SOLO benchmark, GPUs=" << num_gpus
+      << ", size=" << smp_size << std::endl;
+
+  auto smp = GetOrCreateCachedSmp(SOLO, smp_size);
+
+  for (auto _: state) {
+    bamboosmp::SmpEngineMultiGpu engine(*smp, smp_size, num_gpus);
+    engine.FindStableMatching();
+  }
+
+  WriteTimingsToFile("data/benchmark/solo_scaling_timing_results.txt",
+                     "SOLO", num_gpus, smp_size);
+
+  SHUTDOWN_GLOG();
+}
+
+// Register SOLO workload configurations
+BENCHMARK(BM_SmpEngineMultiGpu_Solo_Scaling)
+    // ->Arg(50000)
+    // ->Arg(60000)
+    // ->Arg(70000)
+    // ->Arg(80000)
+    ->Arg(90000)
+    ->Iterations(1);
+
+BENCHMARK_MAIN();

@@ -1,0 +1,59 @@
+#include <benchmark/benchmark.h>
+#include "smp/smp_engine_hybrid.cuh"
+#include "smp/smp_engine_la_old.cuh"
+#include "utils/generate_worklods.h"
+#include "utils/timer.h"
+#include <glog/logging.h>
+#include <smp/smp_engine_la_par_cpu.cuh>
+
+static constexpr int THREADS_PER_BLOCK = 128;
+
+static std::shared_ptr<bamboosmp::SmpObj> GetOrCreateCachedSmp(
+  WorkloadType type, int smp_size, int group_size = 10) {
+  static std::map<std::tuple<WorkloadType, int, int>, std::shared_ptr<bamboosmp::SmpObj> > cache;
+
+  auto key = std::make_tuple(type, smp_size, group_size);
+  auto it = cache.find(key);
+
+  if (it != cache.end()) return it->second;
+
+  PreferenceLists pl_m, pl_w;
+  GenerateWorkload(type, smp_size, pl_m, pl_w, group_size);
+
+  auto smp = bamboosmp::SmpObj::CreateFromPrefLists(pl_m, pl_w, smp_size);
+  cache[key] = std::move(smp);
+
+  return cache[key];
+}
+
+static void BenchmarkEngines(benchmark::State &state, WorkloadType type, const std::string &workload_name) {
+  INIT_GLOG_STR(("BenchmarkEngines_" + workload_name).c_str());
+
+  int smp_size = state.range(0);
+  auto smp = GetOrCreateCachedSmp(type, smp_size);
+
+  for (auto _: state) {
+    bamboosmp::SmpEngineHybrid hybrid_engine(*smp, smp_size);
+    hybrid_engine.FindStableMatching();
+
+    bamboosmp::SmpEngineLaParCpu la_engine(*smp, smp_size);
+    la_engine.FindStableMatching();
+  }
+
+  WriteTimingsToFile(("data/benchmark/hybrid_la_par_cpu_" + workload_name + "_results.txt").c_str(), workload_name, 1,
+                     smp_size);
+
+  SHUTDOWN_GLOG();
+}
+
+BENCHMARK_CAPTURE(BenchmarkEngines, Congested, CONGESTED, "CONGESTED")
+  ->Arg(10000)->Arg(15000)->Arg(20000)->Arg(25000)
+  ->Arg(30000)
+  ->Iterations(1);
+
+BENCHMARK_CAPTURE(BenchmarkEngines, Random, RANDOM, "RANDOM")
+  ->Arg(10000)->Arg(15000)->Arg(20000)->Arg(25000)
+  ->Arg(30000)
+  ->Iterations(1);
+
+BENCHMARK_MAIN();

@@ -1,0 +1,96 @@
+#include <benchmark/benchmark.h>
+#include <smp/gs.cuh>
+#include "utils/generate_worklods.h"
+#include "utils/utils.h"
+#include "utils/timer.h"
+#include <glog/logging.h>
+
+constexpr int THREADS_PER_BLOCK = 128;
+
+// Helper to cache and reuse workloads
+static std::shared_ptr<bamboosmp::SmpObj> GetOrCreateCachedSmp(
+  WorkloadType type, int smp_size, int group_size = 100) {
+  static std::map<std::tuple<WorkloadType, int, int>, std::shared_ptr<bamboosmp::SmpObj> > cached_smps;
+
+  auto key = std::make_tuple(type, smp_size, group_size);
+  auto it = cached_smps.find(key);
+
+  if (it != cached_smps.end()) {
+    return it->second;
+  }
+
+  PreferenceLists pl_m, pl_w;
+  LOG(INFO) << "Generating workload type=" << type << ", size=" << smp_size
+      << ", group_size=" << group_size;
+
+  GenerateWorkload(type, smp_size, pl_m, pl_w, group_size);
+  auto smp = bamboosmp::SmpObj::CreateFromPrefLists(pl_m, pl_w, smp_size);
+
+  cached_smps[key] = std::move(smp);
+  return cached_smps[key];
+}
+
+// GS Sequential (SOLO case)
+static void BM_GS_Seq_Solo(benchmark::State &state) {
+  INIT_GLOG_STR("BM_GS_Seq_Solo");
+
+  int smp_size = state.range(0);
+  auto smp = GetOrCreateCachedSmp(SOLO, smp_size);
+
+  for (auto _: state) {
+    bamboosmp::GS gs_seq(*smp, THREADS_PER_BLOCK, smp_size);
+    gs_seq.StartGS();
+  }
+
+  WriteTimingsToFile("data/benchmark/gs_seq_solo_results.txt", "SOLO", 0, smp_size);
+
+  SHUTDOWN_GLOG();
+}
+
+// BENCHMARK(BM_GS_Seq_Solo)
+// ->Arg(50000)
+// ->Arg(60000)
+// ->Arg(70000)
+// ->Arg(78000)
+// ->Arg(90000)
+// ->Iterations(1);
+
+// GS Parallel CPU (CONGESTED and RANDOM cases)
+static void BM_GS_Par_Cpu(benchmark::State &state, WorkloadType type, const std::string &workload_name) {
+  INIT_GLOG_STR(("BM_GS_Par_Cpu_" + workload_name).c_str());
+
+  int smp_size = state.range(0);
+  constexpr int group_size = 100; // used for RANDOM workload
+
+  auto smp = GetOrCreateCachedSmp(type, smp_size, group_size);
+
+  for (auto _: state) {
+    bamboosmp::GS gs_par_cpu(*smp, THREADS_PER_BLOCK, smp_size);
+    gs_par_cpu.StartGSParallel();
+  }
+
+  std::string filename = "data/benchmark/gs_par_cpu_" + workload_name + "_results.txt";
+  WriteTimingsToFile(filename, workload_name, 0, smp_size);
+
+  SHUTDOWN_GLOG();
+}
+
+// Congested benchmark registration
+// BENCHMARK_CAPTURE(BM_GS_Par_Cpu, Congested, CONGESTED, "CONGESTED")
+// ->Arg(50000)
+// ->Arg(60000)
+// ->Arg(70000)
+// ->Arg(80000)
+// ->Arg(90000)
+// ->Iterations(1);
+
+// Random benchmark registration
+BENCHMARK_CAPTURE(BM_GS_Par_Cpu, Random, RANDOM, "RANDOM")
+// ->Arg(50000)
+// ->Arg(60000)
+// ->Arg(70000)
+// ->Arg(80000)
+->Arg(90000)
+->Iterations(1);
+
+BENCHMARK_MAIN();
