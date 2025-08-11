@@ -6,7 +6,7 @@ add_library(bamboosmp_lib SHARED ${bamboosmp_sources})
 target_link_libraries(bamboosmp_lib PUBLIC
         cuda
         ${GLOG_LIBRARIES}
-`       gflags)
+        ${GFLAGS_LIBRARIES})
 
 #target_compile_options(bamboosmp_lib PUBLIC
 #        $<$<COMPILE_LANGUAGE:CUDA>:-O3 -lineinfo>)

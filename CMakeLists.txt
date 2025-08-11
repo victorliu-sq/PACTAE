@@ -41,6 +41,9 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda")
 # CUDA
 include(cmake/FindCUDA.cmake)
 
+# gflag
+include("cmake/FindGFlags.cmake")
+
 # glog
 include("cmake/FindGlog.cmake")
 if (NOT GLOG_FOUND)
