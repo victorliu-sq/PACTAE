@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="${ROOT_DIR}/.venv"
 
+echo "[check] Running prerequisite checks..."
+bash "${ROOT_DIR}/scripts/check_requirements.sh"
+
 echo "=== BambooSMPAE: bootstrap ==="
 
 # 3) Create/populate venv
