@@ -15,28 +15,8 @@ namespace bamboosmp {
   }
 
   void SmpEngineMw2F9::InitProc() {
-    // Vector<std::thread> threads;
-    // for (size_t tid = 0; tid < num_threads_; ++tid) {
-    //   threads.emplace_back([=] {
-    //     size_t rows_per_thread = CEIL_DIV(this->n_, this->num_threads_);
-    //     size_t start_row = tid * rows_per_thread;
-    //     size_t end_row = (tid == num_threads_ - 1) ? n_ : start_row + rows_per_thread;
-    //     for (size_t w_idx = start_row; w_idx < end_row; ++w_idx) {
-    //       for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-    //         size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //         rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
-    //       }
-    //     }
-    //   });
-    // }
-    //
-    // for (auto &th: threads) {
-    //   th.join();
-    // }
-
     for (size_t w_idx = 0; w_idx < n_; ++w_idx) {
       for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-        // size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
         size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
         rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
       }
@@ -65,7 +45,6 @@ namespace bamboosmp {
           bool is_married = false;
           while (!is_married) {
             // Figure 9
-            // w_idx = this->smp_.flatten_pref_lists_m_vec[m_idx * n_ + w_rank];
             w_idx = this->smp_.flatten_pref_lists_m_vec[m_idx * n_ + w_rank];
 
             m_rank = this->rank_mtx_w_[w_idx * n_ + m_idx];

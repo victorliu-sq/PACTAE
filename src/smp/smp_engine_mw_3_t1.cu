@@ -40,52 +40,6 @@ namespace bamboosmp {
 
   void SmpEngineMw3T1::CoreProc() {
     const int n = this->n_;
-    // auto pref_list_m_dview = this->dev_pref_lists_m_.DeviceView();
-    // auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
-    // auto rank_mtx_w_dview = this->dev_rank_mtx_w_.DeviceView();
-    // auto next_proposed_w_dview = this->dev_next_proposed_w_.DeviceView();
-    // auto partner_rank_dview = this->dev_partner_rank_.DeviceView();
-
-    // this->ExecuteNTasklet(this->n_, [=] __device__(size_t tid) mutable {
-    //   int mi, mi_rank, w_idx, w_rank, mj_rank, mj_rank2;
-    //   mi = tid;
-    //   w_rank = 0;
-    //   bool is_married = false;
-    //   while (!is_married) {
-    //     w_idx = pref_list_m_dview[mi * n + w_rank];
-    //     // w_idx = pref_list_m_dview[IDX_MUL_ADD(mi, n, w_rank)];
-    //     // printf("man %d proposes to woman %d\n", mi, w_idx);
-    //     mi_rank = rank_mtx_w_dview[w_idx * n + mi];
-    //     // mi_rank = rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, mi)];
-    //
-    //     w_rank += 1;
-    //
-    //     // atomicCAS(&partner_rank_dview[w_idx], n, mi_rank);
-    //     mj_rank = partner_rank_dview[w_idx];
-    //
-    //     // if (mj_rank < mi_rank) {
-    //     //   continue;
-    //     // }
-    //
-    //     while (mj_rank > mi_rank) {
-    //       mj_rank2 = atomicCAS(&partner_rank_dview[w_idx], mj_rank, mi_rank);
-    //       if (mj_rank2 == mj_rank) {
-    //         next_proposed_w_dview[mi] = w_rank;
-    //         if (mj_rank == n) {
-    //           is_married = true;
-    //         } else if (mj_rank > mi_rank) {
-    //           mi = pref_list_w_dview[w_idx * n + mj_rank];
-    //           // mi = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, mj_rank)];
-    //           w_rank = next_proposed_w_dview[mi];
-    //         }
-    //         break;
-    //       } else {
-    //         mj_rank = mj_rank2;
-    //       }
-    //     }
-    //   }
-    // });
-    //
     // cuda_stream_.Sync();
     const int *pref_list_m_dview = RawPtr(this->dev_pref_lists_m_);
     const int *pref_list_w_dview = RawPtr(this->dev_pref_lists_w_);

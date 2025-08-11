@@ -118,7 +118,6 @@ namespace bamboosmp {
       iterations += 1;
       // temp_node = this->host_prmtx_[m_idx * n_ + w_rank];
       temp_node = this->host_prmtx_[IDX_MUL_ADD(m_idx, n_, w_rank)];
-      // temp_node = host_prmtx_ptr[IDX_MUL_ADD(m_idx, n_, w_rank)];
       w_idx = temp_node.idx_;
       m_rank = temp_node.rank_;
       p_rank = this->partner_rank_[w_idx];
@@ -130,9 +129,7 @@ namespace bamboosmp {
         this->next_proposed_w_[m_idx] = w_rank;
         this->partner_rank_[w_idx] = m_rank;
 
-        // m_idx = this->smp_.flatten_pref_lists_w_[w_idx * n_ + p_rank];
         m_idx = this->smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, p_rank)];
-        // m_idx = flatten_pref_lists_w_ptr[IDX_MUL_ADD(w_idx, n_, p_rank)];
         w_rank = this->next_proposed_w_[m_idx];
       } else {
         w_rank++;

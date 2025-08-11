@@ -18,28 +18,6 @@ namespace bamboosmp {
 
   void SmpEngineMw3F9::InitProc() {
     // Initialize Rank Matrix
-    // const int n = this->n_;
-    // auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
-    // auto rank_mtx_w_dview = this->dev_rank_mtx_w_.DeviceView();
-
-    // this->ExecuteNTasklet(SIZE_MUL(n, n), [=] __device__(size_t tid) mutable {
-    //   int m_idx, w_idx, m_rank;
-    //   w_idx = tid / n;
-    //   m_rank = tid % n;
-    //   // m_idx = pref_lists[w_idx * n + m_rank];
-    //   m_idx = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, m_rank)];
-    //   // rank_mtx[w_idx * n + m_idx] = m_rank;
-    //   rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)] = m_rank;
-    // });
-
-    // for (size_t w_idx = 0; w_idx < n_; ++w_idx) {
-    //   for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-    //     // size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //     size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //     host_rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
-    //   }
-    // }
-
     for (size_t w_idx = 0; w_idx < n_; ++w_idx) {
       for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
         // size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];

@@ -63,50 +63,6 @@ namespace bamboosmp {
 
   void SmpEngineLa2F8Top::CoreProc() {
     const int n = this->n_;
-    // auto prmtx_dview = this->dev_prmtx_.DeviceView();
-    //
-    // auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
-    // auto next_proposed_w_dview = this->dev_next_proposed_w_.DeviceView();
-    // auto partner_rank_dview = this->dev_partner_rank_.DeviceView();
-    // this->ExecuteNTasklet(this->n_, [=] __device__ (size_t tid) mutable {
-    //   int mi, mi_rank, w_idx, w_rank, mj, mj_rank, mj_rank2;
-    //   mi = tid;
-    //   w_rank = 0;
-    //   PRNode node;
-    //   bool is_married = false;
-    //   while (!is_married) {
-    //     // w_idx = pref_list_m_dview[mi * n + w_rank];
-    //     // printf("man %d proposes to woman %d\n", mi, w_idx);
-    //     // mi_rank = rank_mtx_w_dview[w_idx * n + mi];
-    //     // node = prmtx_dview[IDX_MUL_ADD(mi, n, w_rank)];
-    //     node = prmtx_dview[mi * n + w_rank];
-    //     w_idx = node.idx_;
-    //     mi_rank = node.rank_;
-    //
-    //     w_rank += 1;
-    //     mj_rank = partner_rank_dview[w_idx];
-    //
-    //     if (mj_rank < mi_rank) {
-    //       continue;
-    //     }
-    //
-    //     while (mj_rank > mi_rank) {
-    //       mj_rank2 = atomicCAS(&partner_rank_dview[w_idx], mj_rank, mi_rank);
-    //       if (mj_rank2 == mj_rank) {
-    //         next_proposed_w_dview[mi] = w_rank;
-    //         if (mj_rank == n) {
-    //           is_married = true;
-    //         } else if (mj_rank > mi_rank) {
-    //           mi = pref_list_w_dview[w_idx * n + mj_rank];
-    //           w_rank = next_proposed_w_dview[mi];
-    //         }
-    //         break;
-    //       } else {
-    //         mj_rank = mj_rank2;
-    //       }
-    //     }
-    //   }
-    // });
 
     int block_size = 1024;
     int grid_size = (n + block_size - 1) / block_size;

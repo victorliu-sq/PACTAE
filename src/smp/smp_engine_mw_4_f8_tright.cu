@@ -48,48 +48,6 @@ namespace bamboosmp {
 
   void SmpEngineMw4F8TRight::CoreProc() {
     // const int n = this->n_;
-    // auto pref_list_m_dview = this->dev_pref_lists_m_.DeviceView();
-    // auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
-    // auto rank_mtx_w_dview = this->dev_rank_mtx_w_.DeviceView();
-    // auto next_proposed_w_dview = this->dev_next_proposed_w_.DeviceView();
-    // auto partner_rank_dview = this->dev_partner_rank_.DeviceView();
-    //
-    // this->ExecuteNTasklet(this->n_, [=] __device__(size_t tid) mutable {
-    //   int mi, mi_rank, w_idx, w_rank, mj_rank;
-    //   mi = tid;
-    //   w_rank = 0;
-    //   bool paired = false;
-    //   while (!paired) {
-    //     // w_idx = pref_list_m_dview[mi * n + w_rank];
-    //     w_idx = pref_list_m_dview[IDX_MUL_ADD(mi, n, w_rank)];
-    //     // printf("man %d proposes to woman %d\n", mi, w_idx);
-    //     // mi_rank = rank_mtx_w_dview[w_idx * n + mi];
-    //     mi_rank = rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, mi)];
-    //
-    //     w_rank += 1;
-    //
-    //     // printf("man %d proposes to woman %d\n, current partner rank: %d. \n", mi, w_idx, partner_rank_dview[w_idx]);
-    //     if (partner_rank_dview[w_idx] < mi_rank) {
-    //       continue;
-    //     }
-    //
-    //     mj_rank = atomicMin(&partner_rank_dview[w_idx], mi_rank);
-    //
-    //     if (mj_rank > mi_rank) {
-    //       // printf("Paired\n");
-    //       next_proposed_w_dview[mi] = w_rank;
-    //       paired = mj_rank == n;
-    //       if (!paired) {
-    //         // mi = pref_lists_w[w_idx * n + mj_rank];
-    //         mi = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, mj_rank)];
-    //         w_rank = next_proposed_w_dview[mi];
-    //       }
-    //     }
-    //   }
-    // });
-    //
-    // CUDA_CHECK(cudaDeviceSynchronize());
-
     const int n = this->n_;
 
     const int *pref_list_m_dview = RawPtr(this->dev_pref_lists_m_);

@@ -52,51 +52,12 @@ namespace bamboosmp {
       // int m_rank = rank_mtx_w[w_idx * n + m_idx];
       int m_rank = rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)];
 
-      // node.idx_ = w_idx;
-      // node.rank_ = m_rank;
-      // prnodes_m[m_idx * n + w_rank] = {w_idx, m_rank};
       prmtx_dview[IDX_MUL_ADD(m_idx, n, w_rank)] = {w_idx, m_rank};
     });
   }
 
   void SmpEngineLa3F8Bottom::CoreProc() {
     const int n = this->n_;
-    // auto prmtx_dview = this->dev_prmtx_.DeviceView();
-    //
-    // auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
-    // auto next_proposed_w_dview = this->dev_next_proposed_w_.DeviceView();
-    // auto partner_rank_dview = this->dev_partner_rank_.DeviceView();
-    //
-    // this->ExecuteNTasklet(this->n_, [=] __device__(size_t tid) mutable {
-    //   int mi, mi_rank, w_idx, w_rank, mj_rank;
-    //   mi = tid;
-    //   w_rank = 0;
-    //   PRNode node;
-    //   bool paired = false;
-    //   while (!paired) {
-    //     // node = prnodes_m[mi * n + w_rank];
-    //     node = prmtx_dview[IDX_MUL_ADD(mi, n, w_rank)];
-    //     w_idx = node.idx_;
-    //     mi_rank = node.rank_;
-    //     w_rank += 1;
-    //
-    //     if (partner_rank_dview[w_idx] < mi_rank) {
-    //       continue;
-    //     }
-    //
-    //     mj_rank = atomicMin(&partner_rank_dview[w_idx], mi_rank);
-    //     if (mj_rank > mi_rank) {
-    //       next_proposed_w_dview[mi] = w_rank;
-    //       if (mj_rank == n) {
-    //         paired = true;
-    //       } else {
-    //         // mi = pref_lists_w[w_idx * n + mj_rank];
-    //         mi = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, mj_rank)];
-    //         w_rank = next_proposed_w_dview[mi];
-    //       }
-    //     }
-    //   }
-    // });
 
     int block_size = 1024;
     int grid_size = (n + block_size - 1) / block_size;

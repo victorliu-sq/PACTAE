@@ -24,7 +24,6 @@ namespace bamboosmp {
         size_t end_row = (tid == num_threads_ - 1) ? n_ : start_row + rows_per_thread;
         for (size_t w_idx = start_row; w_idx < end_row; ++w_idx) {
           for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-            // size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
             size_t m_idx = smp_.flatten_pref_lists_w[IDX_MUL_ADD(w_idx, n_, m_rank)];
             rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
           }
@@ -58,8 +57,6 @@ namespace bamboosmp {
 
     while (!done) {
       iteration += 1;
-      // w_idx = smp_.flatten_pref_lists_m_vec[IDX_MUL_ADD(m_idx, n_, w_rank)];
-      // w_idx = flatten_pref_lists_m_ptr[IDX_MUL_ADD(m_idx, n_, w_rank)];
       w_idx = smp_.flatten_pref_lists_m[IDX_MUL_ADD(m_idx, n_, w_rank)];
 
       m_rank = rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)];
@@ -71,8 +68,6 @@ namespace bamboosmp {
       if (m_rank < p_rank) {
         partner_rank_[w_idx] = m_rank;
         if (p_rank != n_) {
-          // int new_free_man = smp_.flatten_pref_lists_w_[IDX_MUL_ADD(w_idx, n_, p_rank)];
-          // int new_free_man = flatten_pref_lists_w_ptr[IDX_MUL_ADD(w_idx, n_, p_rank)];
           int new_free_man = smp_.flatten_pref_lists_w[IDX_MUL_ADD(w_idx, n_, p_rank)];
           free_men_queue_.push(new_free_man);
         }

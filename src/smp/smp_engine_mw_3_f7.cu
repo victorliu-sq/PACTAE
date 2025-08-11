@@ -33,8 +33,6 @@ namespace bamboosmp {
       // m_idx = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, m_rank)];
       m_idx = pref_list_w_dview[row_index + m_rank];
 
-      // rank_mtx[w_idx * n + m_idx] = m_rank;
-      // rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)] = m_rank;
       rank_mtx_w_dview[row_index + m_idx] = m_rank;
     });
 

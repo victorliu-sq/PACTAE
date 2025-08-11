@@ -20,33 +20,6 @@ namespace bamboosmp {
 
   void SmpEngineMwF7::InitProc() {
     // Init Rank Matrix
-    // std::vector<std::thread> threads;
-    //
-    // for (size_t tid = 0; tid < num_threads_; ++tid) {
-    //   threads.emplace_back([=] {
-    //     size_t rows_per_thread = CEIL_DIV(this->n_, this->num_threads_);
-    //     size_t start_row = tid * rows_per_thread;
-    //     size_t end_row = (tid == num_threads_ - 1) ? n_ : start_row + rows_per_thread;
-    //     for (size_t w_idx = start_row; w_idx < end_row; ++w_idx) {
-    //       for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-    //         size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //         rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
-    //       }
-    //     }
-    //   });
-    // }
-    //
-    // for (auto &th: threads) {
-    //   th.join();
-    // }
-
-    // for (size_t w_idx = 0; w_idx < n_; ++w_idx) {
-    //   for (size_t m_rank = 0; m_rank < n_; ++m_rank) {
-    //     // size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //     size_t m_idx = smp_.flatten_pref_lists_w_vec[IDX_MUL_ADD(w_idx, n_, m_rank)];
-    //     host_rank_mtx_w_[IDX_MUL_ADD(w_idx, n_, m_idx)] = m_rank;
-    //   }
-    // }
     const int n = this->n_;
     // 1. Init Rank Matrix
     auto pref_list_w_dview = this->dev_pref_lists_w_.DeviceView();
@@ -56,9 +29,7 @@ namespace bamboosmp {
       int m_idx, w_idx, m_rank;
       w_idx = tid / n;
       m_rank = tid % n;
-      // m_idx = pref_lists[w_idx * n + m_rank];
       m_idx = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, m_rank)];
-      // rank_mtx[w_idx * n + m_idx] = m_rank;
       rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)] = m_rank;
     });
 
