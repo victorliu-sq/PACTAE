@@ -126,7 +126,7 @@ namespace bamboosmp {
     //   }
     // });
 
-    int block_size = 64;
+    int block_size = 1024;
     int grid_size = (n + block_size - 1) / block_size;
 
     La3F9CoreKernel<<<grid_size, block_size, 0, default_stream_.cuda_stream()>>>(
