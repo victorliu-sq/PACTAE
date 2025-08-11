@@ -30,4 +30,4 @@ To run BambooSMP, simply execute the following from the project root directory:
 
     ./runme.sh
 
-The script will automatically handle dataset downloads (requires wget or curl), compilation, and execution of workloads. The resulting `figure3`, `figure5`, `table1`, `figure7`, `figure8`, and `figure9` will be stored in the `data/figures` directory.
+The script will automatically handle dependencies downloads (requires wget or curl), installation, compilation, and execution of workloads. The resulting `figure3`, `figure5`, `table1`, `figure7`, `figure8`, and `figure9` will be stored in the `data/figures` directory.

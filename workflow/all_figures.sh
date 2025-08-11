@@ -36,10 +36,10 @@ run_workflow() {
 
 # List of workflows to run in order
 WORKFLOWS=(
-    "workflow/figure_9.sh"
     "workflow/figure_5.sh"
-    "workflow/figure_8.sh"
     "workflow/figure_7.sh"    # requires SIZE and GROUP
+    "workflow/figure_8.sh"
+    "workflow/figure_9.sh"
     "workflow/figure_3.sh"
     "workflow/table_1.sh"
 )
