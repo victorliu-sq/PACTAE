@@ -668,3 +668,42 @@ __global__ void La3F9CoreKernel(
     }
   }
 }
+
+__global__ void F9RankMatrixInitKernel(
+  int n,
+  const int *pref_list_w_dview,
+  int *rank_mtx_w_dview) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  if (tid >= n * n) return;
+
+  int m_idx, w_idx, m_rank;
+  w_idx = tid / n;
+  m_rank = tid % n;
+  // m_idx = pref_lists[w_idx * n + m_rank];
+  m_idx = pref_list_w_dview[IDX_MUL_ADD(w_idx, n, m_rank)];
+  // rank_mtx[w_idx * n + m_idx] = m_rank;
+  rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)] = m_rank;
+}
+
+__global__ void F9PRMatrixInitKernel(
+  int n,
+  const int *pref_list_m_dview,
+  const int *rank_mtx_w_dview,
+  PRNode *prmtx_dview
+) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  if (tid >= n * n) return;
+
+  // PRNode node;
+  int m_idx = tid / n;
+  int w_rank = tid % n;
+
+  // int w_idx = pref_lists_m[m_idx * n + w_rank];
+  size_t prnode_id = IDX_MUL_ADD(m_idx, n, w_rank);
+  int w_idx = pref_list_m_dview[prnode_id];
+  // int m_rank = rank_mtx_w[w_idx * n + m_idx];
+  int m_rank = rank_mtx_w_dview[IDX_MUL_ADD(w_idx, n, m_idx)];
+
+  // prnodes_m[m_idx * n + w_rank] = {w_idx, m_rank};
+  prmtx_dview[prnode_id] = {w_idx, m_rank};
+}

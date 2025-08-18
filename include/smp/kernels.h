@@ -128,5 +128,18 @@ __global__ void La3F9CoreKernel(
   const int *pref_list_w_dview // [n * n]
 );
 
+__global__ void F9RankMatrixInitKernel(
+  int n,
+  const int * pref_list_w_dview,
+  int * rank_matrix_dview
+);
+
+__global__ void F9PRMatrixInitKernel(
+  int n,
+  const int * pref_list_m_dview,
+  const int * rank_matrix_dview,
+  PRNode* pr_mtx
+);
+
 
 #endif //KERNELS_H

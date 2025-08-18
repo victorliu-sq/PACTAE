@@ -24,7 +24,7 @@ public:
     return data_[idx];
   }
 
-  DEV_INLINE T *data() const { return data_; }
+  DEV_HOST_INLINE T *data() const { return data_; }
 
   DEV_INLINE size_t size() const { return size_; }
 

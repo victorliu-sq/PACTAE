@@ -38,6 +38,10 @@ namespace bamboosmp {
 
     auto PostProc() -> Matching override;
 
+    void BambooTransfer() override {
+      this->AsyncD2HPRMatrix();
+    }
+
     // Lambda must be executed in a public method
     void DoWorkOnGpu();
 
@@ -103,6 +107,7 @@ namespace bamboosmp {
     // SMPObject in the host
     // HArray<PRNode> host_prmtx_;
     Vector<PRNode> host_prmtx_;
+    PRNode* host_prmtx_view_;
 
     // Metadata in the host for postprocessing
     Vector<int> host_next_proposed_w_;

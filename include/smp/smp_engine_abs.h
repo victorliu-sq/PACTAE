@@ -20,6 +20,8 @@ public:
       this->sw_.Stop();
       this->init_time_ = this->sw_.GetEclapsedMs();
 
+      this->BambooTransfer();
+
       // Core Computation Phase
       this->sw_.Start();
       this->CoreProc(); // Do the computation
@@ -59,6 +61,9 @@ protected:
   virtual auto PostProc() -> Matching = 0;
 
   virtual auto GetEngineName() const -> String = 0;
+
+  virtual void BambooTransfer() {
+  }
 
   ms_t precheck_time_{0};
   ms_t init_time_{0};
